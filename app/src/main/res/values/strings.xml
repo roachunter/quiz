@@ -8,4 +8,5 @@
     <string name="no_results_for_quiz_config_error">Failed to compose a quiz with the given parameters. Change the config and try again.</string>
     <string name="rate_limit_error">What\'s the hurry? Wait a couple seconds and try again.</string>
     <string name="unknown_error">Something went wrong... Please try again in a few seconds.</string>
+    <string name="general">General</string>
 </resources>
