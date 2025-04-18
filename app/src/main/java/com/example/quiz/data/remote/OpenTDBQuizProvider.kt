@@ -157,11 +157,17 @@ class OpenTDBQuizProvider(
             Result.Error(DataError.Network.NoInternet)
         } catch (_: HttpRequestTimeoutException) {
             Result.Error(DataError.Network.RequestTimeout)
-        } catch (_: SocketException) {
+        } catch (e: SocketException) {
+            Log.e(logTag, e.message ?: "Socket Exception thrown")
+            e.printStackTrace()
             Result.Error(DataError.Network.Unknown)
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Log.e(logTag, e.message ?: "Exception thrown")
+            e.printStackTrace()
             Result.Error(DataError.Network.Unknown)
-        } catch (_: java.lang.Exception) {
+        } catch (e: java.lang.Exception) {
+            Log.e(logTag, e.message ?: "java.lang.Exception thrown")
+            e.printStackTrace()
             Result.Error(DataError.Network.Unknown)
         }
     }
