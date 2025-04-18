@@ -25,6 +25,7 @@ import com.example.quiz.ui.theme.ColorSets
 @Composable
 fun CategoryList(
     categories: List<Category>,
+    onCategoryClick: (Category) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val groupedCategories = remember(categories) {
@@ -62,7 +63,7 @@ fun CategoryList(
                         CategoryButton(
                             category = category,
                             colorSet = ColorSets.random,
-                            onClick = {},
+                            onClick = { onCategoryClick(category) },
                             modifier = Modifier
                                 .weight(1f)
                                 .height(100.dp)

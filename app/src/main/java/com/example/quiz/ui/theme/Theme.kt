@@ -12,17 +12,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    surface = Color.Black,
+    surface = Grey900,
     onSurface = Color.White,
-    background = Color.Black,
-    onBackground = Color.White
+    background = Grey900,
+    onBackground = Color.White,
+    surfaceVariant = Grey700,
+    outline = Grey600,
+    outlineVariant = Grey800
 )
 
 private val LightColorScheme = lightColorScheme(
     surface = Color.White,
     onSurface = Color.Black,
     background = Color.White,
-    onBackground = Color.Black
+    onBackground = Color.Black,
+    surfaceVariant = Grey200,
+    outline = Grey500,
+    outlineVariant = Grey300
 )
 
 @Composable

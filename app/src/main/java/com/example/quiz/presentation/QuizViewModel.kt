@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 
 class QuizViewModel(
     private val quizProvider: QuizProvider
-): ViewModel() {
+) : ViewModel() {
 
     private val _state = MutableStateFlow(QuizState())
     val state = _state.stateIn(
@@ -36,7 +36,43 @@ class QuizViewModel(
     fun onEvent(event: QuizEvent) {
         when (event) {
             QuizEvent.OnLoadCategoriesClick -> updateCategories()
-            is QuizEvent.OnCategorySelected -> TODO()
+
+            is QuizEvent.OnCategorySelected -> updatePickedCategory(event.category)
+            is QuizEvent.OnQuestionAmountPick -> updatePickedQuestionAmount(event.amount)
+            is QuizEvent.OnQuestionDifficultyPick -> updatePickedDifficulty(event.difficulty)
+            is QuizEvent.OnQuestionTypePick -> updatePickedType(event.type)
+        }
+    }
+
+    private fun updatePickedType(type: QuestionType) {
+        _state.update {
+            it.copy(
+                pickedType = type
+            )
+        }
+    }
+
+    private fun updatePickedDifficulty(difficulty: QuestionDifficulty) {
+        _state.update {
+            it.copy(
+                pickedDifficulty = difficulty
+            )
+        }
+    }
+
+    private fun updatePickedQuestionAmount(amount: Int) {
+        _state.update {
+            it.copy(
+                pickedQuestionAmount = amount
+            )
+        }
+    }
+
+    private fun updatePickedCategory(category: Category) {
+        _state.update {
+            it.copy(
+                pickedCategory = category
+            )
         }
     }
 
@@ -51,7 +87,15 @@ class QuizViewModel(
             _state.update {
                 it.copy(
                     //categories = categories ?: it.categories,
-                    categories = List(30) { index -> Category(id = index, name = "Test #$index") },
+                    categories = List(30) { index ->
+                        Category(
+                            id = index, name = "Test #$index", group = when (index) {
+                                in 0..9 -> "Test category 1"
+                                in 10..19 -> "Test category 2"
+                                else -> "Test category 3"
+                            }
+                        )
+                    },
                     isLoading = false
                 )
             }
