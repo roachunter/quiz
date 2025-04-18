@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Quiz</string>
+
+    <!-- Api Request Errors -->
+    <string name="no_internet_error">Looks like you\'re offline. Check your connection and try again.</string>
+    <string name="request_timeout_error">Request timed out. Check your connection and try again.</string>
+    <string name="invalid_data_format_error">Received quiz has corrupted structure. Please try again.</string>
+    <string name="no_results_for_quiz_config_error">Failed to compose a quiz with the given parameters. Change the config and try again.</string>
+    <string name="rate_limit_error">What\'s the hurry? Wait a couple seconds and try again.</string>
+    <string name="unknown_error">Something went wrong... Please try again in a few seconds.</string>
 </resources>
