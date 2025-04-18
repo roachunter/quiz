@@ -7,6 +7,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
@@ -20,7 +21,10 @@ val appModule = module {
     }
 
     single<QuizProvider> {
-        OpenTDBQuizProvider(client = get())
+        OpenTDBQuizProvider(
+            client = get(),
+            context = androidContext()
+        )
     }
 
     viewModelOf(::QuizViewModel)
