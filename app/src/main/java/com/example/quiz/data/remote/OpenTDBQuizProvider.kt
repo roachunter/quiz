@@ -1,6 +1,8 @@
 package com.example.quiz.data.remote
 
+import android.content.Context
 import android.util.Log
+import com.example.quiz.R
 import com.example.quiz.domain.category.Category
 import com.example.quiz.domain.question.Question
 import com.example.quiz.domain.question.QuestionDifficulty
@@ -20,6 +22,7 @@ import kotlinx.serialization.Serializable
 import java.net.SocketException
 
 class OpenTDBQuizProvider(
+    private val context: Context,
     private val client: HttpClient
 ) : QuizProvider {
     private val logTag = "QuizProvider"
@@ -132,7 +135,7 @@ class OpenTDBQuizProvider(
                 val categoriesDto = response.body<CategoriesDto>()
 
                 // mapping categories to out model
-                val categories = categoriesDto.triviaCategories.map { it.toModel() }
+                val categories = categoriesDto.triviaCategories.map { it.toModel(context) }
                 Result.Success(categories)
             }
 
@@ -223,8 +226,18 @@ private data class CategoryDto(
     val name: String
 )
 
-private fun CategoryDto.toModel(): Category =
-    Category(
+private fun CategoryDto.toModel(context: Context): Category {
+    val split = name.split(": ")
+
+    val group = if (split.size > 1) {
+        split.first()
+    } else context.resources.getString(R.string.general)
+
+    val categoryName = split.last()
+
+    return Category(
         id = id,
-        name = name
+        name = categoryName,
+        group = group
     )
+}
