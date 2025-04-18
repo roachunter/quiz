@@ -60,6 +60,7 @@ class OpenTDBQuizProvider(
                         val t = when (it) {
                             QuestionType.Multiple -> "multiple"
                             QuestionType.Boolean -> "boolean"
+                            else -> return@let
                         }
                         append("type", t)
                     }
