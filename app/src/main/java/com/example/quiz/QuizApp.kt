@@ -1,7 +1,8 @@
-package com.example
+package com.example.quiz
 
 import android.app.Application
 import com.example.quiz.di.appModule
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
 class QuizApp : Application() {
@@ -9,6 +10,7 @@ class QuizApp : Application() {
         super.onCreate()
 
         startKoin {
+            androidContext(this@QuizApp)
             modules(appModule)
         }
     }
