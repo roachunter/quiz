@@ -11,4 +11,8 @@ sealed interface QuizEvent {
     data class OnQuestionAmountPick(val amount: Int) : QuizEvent
     data class OnQuestionDifficultyPick(val difficulty: QuestionDifficulty) : QuizEvent
     data class OnQuestionTypePick(val type: QuestionType) : QuizEvent
+
+    data object OnStartQuizClick: QuizEvent
+    data class OnAnswerPicked(val answer: String): QuizEvent
+    data object OnGoHomeClick: QuizEvent
 }
