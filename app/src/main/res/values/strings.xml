@@ -22,4 +22,10 @@
     <string name="true_false">True/False</string>
     <string name="cancel">Cancel</string>
     <string name="start_quiz">Start quiz</string>
+    <string name="getting_quiz_ready">Getting quiz ready...</string>
+    <string name="results">Results</string>
+    <string name="back_to_home">Back to Home</string>
+    <string name="correct_answer">Correct answer</string>
+    <string name="your_answer">Your answer</string>
+    <string name="answers">Answers</string>
 </resources>
