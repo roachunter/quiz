@@ -15,11 +15,11 @@ import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpStatusCode
-import io.ktor.http.parameters
 import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.net.SocketException
+import java.net.URLDecoder
 
 class OpenTDBQuizProvider(
     private val context: Context,
@@ -37,12 +37,12 @@ class OpenTDBQuizProvider(
             // requesting api for quiz
             client.get(OpenTDBApiConfig.QUIZ_ENDPOINT) {
                 // specifying request parameters
-                parameters {
-                    append("amount", "$questionAmount")
+                url {
+                    parameters.append("amount", "$questionAmount")
 
                     // category is ignored if not specified
                     category?.let {
-                        append("category", "${it.id}")
+                        parameters.append("category", "${it.id}")
                     }
 
                     // difficulty is ignored if not specified
@@ -51,8 +51,9 @@ class OpenTDBQuizProvider(
                             QuestionDifficulty.Easy -> "easy"
                             QuestionDifficulty.Medium -> "medium"
                             QuestionDifficulty.Hard -> "hard"
+                            else -> return@let
                         }
-                        append("difficulty", diff)
+                        parameters.append("difficulty", diff)
                     }
 
                     // type is ignored if not specified
@@ -62,8 +63,11 @@ class OpenTDBQuizProvider(
                             QuestionType.Boolean -> "boolean"
                             else -> return@let
                         }
-                        append("type", t)
+                        parameters.append("type", t)
                     }
+
+                    // encoding for easier answer decoding
+                    parameters.append("encode", "url3986")
                 }
             }
         }.let {
@@ -209,10 +213,12 @@ private fun QuestionDto.toModel(): Question =
             "hard" -> QuestionDifficulty.Hard
             else -> throw IllegalArgumentException("Unknown question difficulty: $difficulty")
         },
-        category = category,
-        questionText = question,
-        correctAnswer = correctAnswer,
-        incorrectAnswers = incorrectAnswers
+        category = decodeUrl(category),
+        questionText = decodeUrl(question),
+        correctAnswer = decodeUrl(correctAnswer),
+        incorrectAnswers = incorrectAnswers.map {
+            decodeUrl(it)
+        }
     )
 
 @Serializable
@@ -242,3 +248,6 @@ private fun CategoryDto.toModel(context: Context): Category {
         group = group
     )
 }
+
+private fun decodeUrl(url: String) =
+    URLDecoder.decode(url, "UTF-8")
