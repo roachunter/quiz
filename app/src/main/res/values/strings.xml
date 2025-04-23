@@ -28,4 +28,6 @@
     <string name="correct_answer">Correct answer</string>
     <string name="your_answer">Your answer</string>
     <string name="answers">Answers</string>
+    <string name="no_categories_found">We didn\'t find any categories.</string>
+    <string name="try_again">Try again</string>
 </resources>

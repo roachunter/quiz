@@ -3,9 +3,12 @@ package com.example.quiz.presentation
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Button
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -71,18 +74,34 @@ fun HomeScreen(
                         )
                     }
                     false -> {
-                        CategoryList(
-                            categories = state.categories,
-                            onCategoryClick = {
-                                // sending event to view model
-                                onEvent(QuizEvent.OnCategorySelected(it))
-                                // and showing quiz setup dialog
-                                showQuizSetupDialog = true
-                            },
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(horizontal = 16.dp)
-                        )
+                        // if list of categories is empty, displaying corresponding message
+                        // with 'try again' button
+                        if (state.categories.isEmpty()) {
+                            Text(text = stringResource(R.string.no_categories_found))
+
+                            Spacer(Modifier.height(8.dp))
+
+                            Button(
+                                onClick = {
+                                    onEvent(QuizEvent.OnLoadCategoriesClick)
+                                }
+                            ) {
+                                Text(text = stringResource(R.string.try_again))
+                            }
+                        } else {
+                            CategoryList(
+                                categories = state.categories,
+                                onCategoryClick = {
+                                    // sending event to view model
+                                    onEvent(QuizEvent.OnCategorySelected(it))
+                                    // and showing quiz setup dialog
+                                    showQuizSetupDialog = true
+                                },
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(horizontal = 16.dp)
+                            )
+                        }
                     }
                 }
             }
