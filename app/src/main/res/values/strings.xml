@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Quiz</string>
 
+    <!-- General words and phrases -->
+    <string name="general">General</string>
+
     <!-- Api Request Errors -->
     <string name="no_internet_error">Looks like you\'re offline. Check your connection and try again.</string>
     <string name="request_timeout_error">Request timed out. Check your connection and try again.</string>
@@ -8,26 +11,37 @@
     <string name="no_results_for_quiz_config_error">Failed to compose a quiz with the given parameters. Change the config and try again.</string>
     <string name="rate_limit_error">What\'s the hurry? Wait a couple seconds and try again.</string>
     <string name="unknown_error">Something went wrong... Please try again in a few seconds.</string>
-    <string name="general">General</string>
+
+    <!-- Home screen (list of categories) strings -->
+    <string name="no_categories_found">We didn\'t find any categories.</string>
+    <string name="try_again">Try again</string>
     <string name="looking_for_categories">Looking for quiz categories...</string>
+
+    <!-- Setup quiz dialog strings -->
     <string name="set_up_your_quiz">Set up your quiz</string>
+
     <string name="question_amount">Question amount</string>
+
     <string name="difficulty">Difficulty</string>
+    <string name="any">Any</string>
     <string name="easy">Easy</string>
     <string name="medium">Medium</string>
     <string name="hard">Hard</string>
+
     <string name="type">Type</string>
-    <string name="any">Any</string>
     <string name="multiple_choise">Multiple choise</string>
     <string name="true_false">True/False</string>
+
     <string name="cancel">Cancel</string>
     <string name="start_quiz">Start quiz</string>
+
     <string name="getting_quiz_ready">Getting quiz ready...</string>
+
+    <!-- Quiz results screen strings -->
     <string name="results">Results</string>
     <string name="back_to_home">Back to Home</string>
+
+    <string name="answers">Answers</string>
     <string name="correct_answer">Correct answer</string>
     <string name="your_answer">Your answer</string>
-    <string name="answers">Answers</string>
-    <string name="no_categories_found">We didn\'t find any categories.</string>
-    <string name="try_again">Try again</string>
 </resources>
