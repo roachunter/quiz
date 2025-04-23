@@ -21,6 +21,9 @@ import androidx.compose.ui.unit.dp
 import com.example.quiz.domain.category.Category
 import com.example.quiz.ui.theme.ColorSets
 
+/**
+ * Shows lazy column with categories available
+ */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CategoryList(
@@ -28,17 +31,23 @@ fun CategoryList(
     onCategoryClick: (Category) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    // grouping categories into map
+    // with category groups as keys
+    // and the list of categories in the corresponding group as values
     val groupedCategories = remember(categories) {
         categories.groupBy {
             it.group
         }
     }
+
     LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier
     ) {
         groupedCategories.forEach { (group, categories) ->
+
+            // group header
             stickyHeader(key = group) {
                 Text(
                     text = group,
@@ -51,6 +60,7 @@ fun CategoryList(
                 )
             }
 
+            // category buttons
             items(
                 items = categories.chunked(2),
                 key = { it.toString() }

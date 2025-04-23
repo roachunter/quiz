@@ -23,19 +23,28 @@ class QuizViewModel(
     private val quizProvider: QuizProvider
 ) : ViewModel() {
 
+    // private app state instance
     private val _state = MutableStateFlow(QuizState())
+
+    // exposing state as immutable StateFlow
     val state = _state.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000L),
         initialValue = QuizState()
     )
 
+    // answers user picked in quiz
     private val pickedAnswers = mutableListOf<String>()
 
+    // loading categories on init
     init {
         loadCategories()
     }
 
+    /**
+     * Processes events from UI
+     * @param event Event happened in UI
+     */
     fun onEvent(event: QuizEvent) {
         when (event) {
             QuizEvent.OnLoadCategoriesClick -> loadCategories()
@@ -51,6 +60,9 @@ class QuizViewModel(
         }
     }
 
+    /**
+     * Drives user back to list of categories screen
+     */
     private fun goHome() {
         _state.update {
             it.copy(
@@ -60,6 +72,9 @@ class QuizViewModel(
         }
     }
 
+    /**
+     * Finishes quiz, drives user to quiz results screen
+     */
     private fun finishQuiz() {
         val quizSession = QuizSession(
             category = _state.value.pickedCategory,
@@ -77,6 +92,10 @@ class QuizViewModel(
         }
     }
 
+    /**
+     * Ads answer to picked answers list,
+     * calls finishQuiz after last question
+     */
     private fun processAnswer(answer: String) {
         pickedAnswers += answer
         if (pickedAnswers.size == _state.value.questions.size) {
@@ -91,6 +110,10 @@ class QuizViewModel(
         }
     }
 
+    /**
+     * Gets questions from api,
+     * drives user to quiz screen
+     */
     private fun startQuiz() {
         viewModelScope.launch {
             _state.update {
@@ -111,19 +134,6 @@ class QuizViewModel(
                 type = type.takeIf { it != QuestionType.Any }
             )
 
-            /*val quiz = List(amount) {
-                Question(
-                    type = type,
-                    difficulty = difficulty,
-                    category = category.name,
-                    questionText = "Test question #$it",
-                    correctAnswer = "Correct answer",
-                    incorrectAnswers = List(3) {
-                        "Incorrect answer #$it"
-                    }
-                )
-            }*/
-
             _state.update {
                 it.copy(
                     isLoadingQuestions = false
@@ -142,6 +152,9 @@ class QuizViewModel(
         }
     }
 
+    /**
+     * Updates state with picked question type
+     */
     private fun updatePickedType(type: QuestionType) {
         _state.update {
             it.copy(
@@ -150,6 +163,9 @@ class QuizViewModel(
         }
     }
 
+    /**
+     * Updates state with picked question difficulty
+     */
     private fun updatePickedDifficulty(difficulty: QuestionDifficulty) {
         _state.update {
             it.copy(
@@ -158,6 +174,9 @@ class QuizViewModel(
         }
     }
 
+    /**
+     * Updates state with picked question amount
+     */
     private fun updatePickedQuestionAmount(amount: Int) {
         _state.update {
             it.copy(
@@ -166,6 +185,9 @@ class QuizViewModel(
         }
     }
 
+    /**
+     * Updates state with picked question category
+     */
     private fun updatePickedCategory(category: Category) {
         _state.update {
             it.copy(
@@ -174,6 +196,9 @@ class QuizViewModel(
         }
     }
 
+    /**
+     * Updates state with categories fetched from api
+     */
     private fun loadCategories() {
         viewModelScope.launch {
             _state.update {
@@ -185,21 +210,15 @@ class QuizViewModel(
             _state.update {
                 it.copy(
                     categories = categories ?: it.categories,
-                    /*categories = List(30) { index ->
-                        Category(
-                            id = index, name = "Test #$index", group = when (index) {
-                                in 0..9 -> "Test category 1"
-                                in 10..19 -> "Test category 2"
-                                else -> "Test category 3"
-                            }
-                        )
-                    },*/
                     isLoadingCategories = false
                 )
             }
         }
     }
 
+    /**
+     * Returns list of categories fetched from api, or null if an error occurred
+     */
     private suspend fun getCategories(): List<Category>? {
         return when (val result = quizProvider.getCategories()) {
             is Result.Success -> result.data
@@ -210,6 +229,9 @@ class QuizViewModel(
         }
     }
 
+    /**
+     * Returns list of questions fetched from api, or null if an error occurred
+     */
     private suspend fun getQuestions(
         amount: Int,
         category: Category? = null,
@@ -225,6 +247,9 @@ class QuizViewModel(
         }
     }
 
+    /**
+     * Displays error box in UI with message based on [error]
+     */
     private suspend fun handleFetchingError(error: DataError) {
         val errorMessage = when (error) {
             DataError.Network.NoInternet -> R.string.no_internet_error

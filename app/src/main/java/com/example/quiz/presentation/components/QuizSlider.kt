@@ -22,6 +22,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.quiz.ui.theme.ColorSet
 
+/**
+ * Shows a slider with 3d thumb
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun QuizSlider(
@@ -40,13 +43,16 @@ fun QuizSlider(
         interactionSource = interactionSource,
         steps = 2,
         thumb = {
+            // set of fields to create 3d pressing effect
             val topLayerElevation = remember { 4.dp }
             val isDragged by interactionSource.collectIsDraggedAsState()
             val offset by animateDpAsState(
                 targetValue = if (!isDragged) 0.dp else topLayerElevation
             )
 
+            // main thumb container
             Box(modifier = Modifier.size(28.dp)) {
+                // dark part at the bottom
                 Box(
                     modifier = Modifier
                         .matchParentSize()
@@ -55,6 +61,7 @@ fun QuizSlider(
                         .background(colorSet.dark, MaterialTheme.shapes.small)
                 )
 
+                // top part
                 Box(
                     modifier = Modifier
                         .matchParentSize()
@@ -66,13 +73,16 @@ fun QuizSlider(
             }
         },
         track = { sliderState ->
+            // calculating thumb position
             val fraction by remember {
                 derivedStateOf {
                     (sliderState.value - sliderState.valueRange.start) / (sliderState.valueRange.endInclusive - sliderState.valueRange.start)
                 }
             }
 
+            // track container
             Box(Modifier.fillMaxWidth().offset(y = 2.dp)) {
+                // filled track part
                 Box(
                     Modifier
                         .fillMaxWidth(fraction)
@@ -81,6 +91,7 @@ fun QuizSlider(
                         .background(colorSet.light, MaterialTheme.shapes.small)
                 )
 
+                // rest track part
                 Box(
                     Modifier
                         .fillMaxWidth(1f - fraction)

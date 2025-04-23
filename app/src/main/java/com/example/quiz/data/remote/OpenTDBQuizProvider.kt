@@ -21,6 +21,9 @@ import kotlinx.serialization.Serializable
 import java.net.SocketException
 import java.net.URLDecoder
 
+/**
+ * [QuizProvider] implementation for Open Trivia Database API
+ */
 class OpenTDBQuizProvider(
     private val context: Context,
     private val client: HttpClient

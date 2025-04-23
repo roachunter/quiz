@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
+// color palette for dark theme
 private val DarkColorScheme = darkColorScheme(
     surface = Grey900,
     onSurface = Color.White,
@@ -21,6 +22,8 @@ private val DarkColorScheme = darkColorScheme(
     outlineVariant = Grey800
 )
 
+
+// color palette for light theme
 private val LightColorScheme = lightColorScheme(
     surface = Color.White,
     onSurface = Color.Black,
@@ -34,7 +37,7 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun QuizTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
+    // dynamic color is disabled since we're using color sets
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {

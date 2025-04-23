@@ -11,15 +11,24 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
+/**
+ * Main Koin DI Module
+ */
 val appModule = module {
+
+    // HttpClient instance
     single<HttpClient> {
         HttpClient(CIO) {
+            // installing ContentNegotiation plugin for
+            // to/from Json conversion
             install(ContentNegotiation) {
                 json()
             }
         }
     }
 
+    // QuizProvider instance to which our
+    // Open Trivia Database implementation is bound
     single<QuizProvider> {
         OpenTDBQuizProvider(
             client = get(),
@@ -27,5 +36,6 @@ val appModule = module {
         )
     }
 
+    // QuizViewModel instance
     viewModelOf(::QuizViewModel)
 }

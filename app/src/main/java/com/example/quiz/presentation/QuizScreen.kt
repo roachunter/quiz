@@ -28,6 +28,9 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import com.example.quiz.domain.question.Question
 
+/**
+ * Shows current question
+ */
 @Composable
 fun QuizScreen(
     state: QuizState,
@@ -39,11 +42,11 @@ fun QuizScreen(
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // calculating progress to display with indicator
         val quizProgress by animateFloatAsState(
             targetValue = state.currentQuestionNumber.toFloat()
                     / state.pickedQuestionAmount,
         )
-
         LinearProgressIndicator(
             progress = { quizProgress },
             drawStopIndicator = {},
@@ -52,27 +55,33 @@ fun QuizScreen(
 
         Spacer(Modifier.height(16.dp))
 
+        // shows transition to the next question when index changes
         AnimatedContent(
             targetState = state.currentQuestionNumber,
+            // custom animation for sliding in from the right
+            // and sliding out to the left
             transitionSpec = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Start
                 ) togetherWith slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Start
+                    towards = AnimatedContentTransitionScope.SlideDirection.Start
                 )
             },
             modifier = Modifier.fillMaxSize()
         ) { questionNumber ->
+            // getting current question
             val question by remember {
                 derivedStateOf {
                     state.questions[questionNumber]
                 }
             }
 
+            // displaying current question
             QuestionContainer(
                 question = question,
-                onAnswerPicked = {
-                    onEvent(QuizEvent.OnAnswerPicked(it))
+                onAnswerPicked = { answer ->
+                    // sending picked answer to view model
+                    onEvent(QuizEvent.OnAnswerPicked(answer))
                 },
                 modifier = Modifier.fillMaxSize()
             )
@@ -80,6 +89,9 @@ fun QuizScreen(
     }
 }
 
+/**
+ * Shows question and answers
+ */
 @Composable
 private fun QuestionContainer(
     question: Question,
@@ -90,6 +102,7 @@ private fun QuestionContainer(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        // container for question text
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -98,34 +111,39 @@ private fun QuestionContainer(
                     shape = MaterialTheme.shapes.extraLarge
                 )
                 .background(
-                    MaterialTheme.colorScheme.surface,
-                    MaterialTheme.shapes.extraLarge
+                    color = MaterialTheme.colorScheme.surface,
+                    shape = MaterialTheme.shapes.extraLarge
                 )
                 .padding(28.dp),
             contentAlignment = Alignment.Center
         ) {
+            // question text
             Text(
                 text = question.questionText
             )
         }
 
+        // holds shuffled question answers
         val shuffledAnswers = rememberSaveable {
             question.getShuffledAnswers()
         }
 
+        // for each answer displaying button for picking it
         shuffledAnswers.forEach { answer ->
+            // clickable answer container
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(
-                        MaterialTheme.colorScheme.surfaceVariant,
-                        MaterialTheme.shapes.extraLarge
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        shape = MaterialTheme.shapes.extraLarge
                     )
                     .clickable {
                         onAnswerPicked(answer)
                     }
                     .padding(28.dp)
             ) {
+                // answer text
                 Text(
                     text = answer
                 )

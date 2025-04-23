@@ -3,6 +3,9 @@ package com.example.quiz.ui.theme
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 
+/**
+ * Helper object that provides color sets
+ */
 data object ColorSets {
 
     val red = ColorSet(

@@ -26,6 +26,9 @@ import com.example.quiz.domain.category.Category
 import com.example.quiz.ui.theme.ColorSet
 import kotlinx.coroutines.launch
 
+/**
+ * Shows a button to pick a category
+ */
 @Composable
 fun CategoryButton(
     category: Category,
@@ -33,6 +36,7 @@ fun CategoryButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    // set of fields to create 3d pressing effect
     val topLayerElevation = remember { 6.dp }
     val offset = remember {
         Animatable(
@@ -41,7 +45,10 @@ fun CategoryButton(
     }
     val coroutineScope = rememberCoroutineScope()
 
+    // main button container
     Box(modifier = modifier) {
+
+        // dark part at the bottom
         Box(
             modifier = Modifier
                 .matchParentSize()
@@ -51,6 +58,7 @@ fun CategoryButton(
                 .background(colorSet.dark)
         )
 
+        // top clickable part with button content
         Box(
             modifier = Modifier
                 .matchParentSize()

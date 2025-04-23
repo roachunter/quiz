@@ -4,6 +4,9 @@ import com.example.quiz.domain.category.Category
 import com.example.quiz.domain.question.QuestionDifficulty
 import com.example.quiz.domain.question.QuestionType
 
+/**
+ * Events that can happen in UI
+ */
 sealed interface QuizEvent {
     data object OnLoadCategoriesClick : QuizEvent
 

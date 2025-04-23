@@ -26,6 +26,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.quiz.ui.theme.ColorSet
 
+/**
+ * Displays 3d buttons from which only one can be selected
+ */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun QuizSegmentedButtons(
@@ -35,7 +38,6 @@ fun QuizSegmentedButtons(
     colorSet: ColorSet,
     modifier: Modifier = Modifier
 ) {
-
     FlowRow(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically),
@@ -63,12 +65,16 @@ fun QuizSegmentedButton(
     colorSet: ColorSet,
     modifier: Modifier = Modifier
 ) {
+    // set of fields to create 3d pressing effect
     val topLayerElevation = remember { 4.dp }
     val offset by animateDpAsState(
         targetValue = if (isSelected) topLayerElevation else 0.dp
     )
 
+    // main button container
     Box(modifier.wrapContentSize()) {
+
+        // dark part at the bottom
         Box(
             modifier = Modifier
                 .matchParentSize()
@@ -84,6 +90,7 @@ fun QuizSegmentedButton(
                 )
         )
 
+        // top clickable part with button content
         Box(
             modifier = Modifier
                 .height(IntrinsicSize.Min)

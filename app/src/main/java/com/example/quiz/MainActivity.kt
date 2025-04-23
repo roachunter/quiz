@@ -28,10 +28,12 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             QuizTheme {
+                // custom scaffold that allows message box displaying
                 ScaffoldWithMessageEvents(
                     modifier = Modifier
                         .fillMaxSize()
                 ) { innerPadding ->
+                    // main app container
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
@@ -39,13 +41,17 @@ class MainActivity : ComponentActivity() {
                             .padding(innerPadding)
                     ) {
 
+                        // getting view model from our koin appModule
                         val viewModel = getViewModel<QuizViewModel>()
+                        // getting ui state from view model
                         val state by viewModel.state.collectAsState()
 
+                        // animating transition between different screens
                         AnimatedContent(
                             targetState = state.currentRoute
                         ) { route ->
                             when (route) {
+                                // route with the list of categories
                                 QuizRoute.Home -> {
                                     HomeScreen(
                                         state = state,
@@ -54,6 +60,8 @@ class MainActivity : ComponentActivity() {
                                             .fillMaxSize()
                                     )
                                 }
+
+                                // route for quiz questions
                                 QuizRoute.Quiz -> {
                                     QuizScreen(
                                         state = state,
@@ -62,6 +70,8 @@ class MainActivity : ComponentActivity() {
                                             .fillMaxSize()
                                     )
                                 }
+
+                                // route for quiz results
                                 QuizRoute.Results -> {
                                     QuizResultsScreen(
                                         state = state,

@@ -2,6 +2,8 @@ package com.example.quiz.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+// colors used in the app
+
 val Grey200 = Color(0xffe5e5e5)
 val Grey300 = Color(0xffd4d4d4)
 val Grey500 = Color(0xff737373)

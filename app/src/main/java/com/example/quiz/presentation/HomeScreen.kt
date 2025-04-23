@@ -24,6 +24,10 @@ import com.example.quiz.presentation.components.CategoryList
 import com.example.quiz.presentation.components.QuizSetupDialog
 import com.example.quiz.ui.theme.ColorSets
 
+/**
+ * Main screen. Shows list of fetched categories
+ * divided into groups
+ */
 @Composable
 fun HomeScreen(
     state: QuizState,
@@ -31,6 +35,8 @@ fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
+
+        // header with app name
         Text(
             text = stringResource(R.string.app_name),
             style = MaterialTheme.typography.displayLarge,
@@ -39,9 +45,13 @@ fun HomeScreen(
                 .padding(start = 28.dp, top = 16.dp)
         )
 
+        // flag that controls displaying quiz setup dialog
         var showQuizSetupDialog by remember {
             mutableStateOf(false)
         }
+
+        // showing loading indicator while fetching,
+        // list of categories after
         AnimatedContent(
             targetState = state.isLoadingCategories
         ) { isLoading ->
@@ -64,7 +74,9 @@ fun HomeScreen(
                         CategoryList(
                             categories = state.categories,
                             onCategoryClick = {
+                                // sending event to view model
                                 onEvent(QuizEvent.OnCategorySelected(it))
+                                // and showing quiz setup dialog
                                 showQuizSetupDialog = true
                             },
                             modifier = Modifier

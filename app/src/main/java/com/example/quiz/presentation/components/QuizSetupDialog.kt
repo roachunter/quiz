@@ -36,6 +36,9 @@ import com.example.quiz.presentation.QuizState
 import com.example.quiz.ui.theme.ColorSet
 import com.example.quiz.ui.theme.ColorSets
 
+/**
+ * Dialog for setting up quiz parameters
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun QuizSetupDialog(
@@ -45,6 +48,7 @@ fun QuizSetupDialog(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    // main dialog container that displays it on top of all other content
     Dialog(
         onDismissRequest = onDismissRequest
     ) {
@@ -54,6 +58,8 @@ fun QuizSetupDialog(
                 .background(MaterialTheme.colorScheme.surface)
                 .padding(horizontal = 16.dp, vertical = 28.dp)
         ) {
+            // showing loading indicator if fetching questions
+            // or main dialog content otherwise
             when (state.isLoadingQuestions) {
                 true -> {
                     Text(
@@ -85,6 +91,9 @@ fun QuizSetupDialog(
     }
 }
 
+/**
+ * Main content of quiz setup dialog
+ */
 @Composable
 private fun ColumnScope.QuizSetupDialogContent(
     state: QuizState,
@@ -92,6 +101,7 @@ private fun ColumnScope.QuizSetupDialogContent(
     onEvent: (QuizEvent) -> Unit,
     onDismissRequest: () -> Unit
 ) {
+    // header
     Text(
         text = stringResource(R.string.set_up_your_quiz),
         style = MaterialTheme.typography.headlineMedium
@@ -99,6 +109,7 @@ private fun ColumnScope.QuizSetupDialogContent(
 
     Spacer(Modifier.height(16.dp))
 
+    // picked category text
     Text(
         text = state.pickedCategory.name,
         style = MaterialTheme.typography.titleLarge
@@ -106,22 +117,26 @@ private fun ColumnScope.QuizSetupDialogContent(
 
     Spacer(Modifier.height(16.dp))
 
+    // holds question amount picked on slider
     var amount by remember {
         mutableFloatStateOf(state.pickedQuestionAmount.toFloat())
     }
+    // label for slider, amount is specified next to it
     Text(
-        text = stringResource(R.string.question_amount)
-                + "   ${amount.toInt()}"
+        text = stringResource(R.string.question_amount) + "   ${amount.toInt()}"
     )
 
     Spacer(Modifier.height(8.dp))
 
+    // slider for amount
     QuizSlider(
         value = amount,
         onValueChange = {
+            // while the user is dragging, updating only amount in UI
             amount = it
         },
         onValueChangeFinished = {
+            // sending amount to view model when the user stops dragging
             onEvent(QuizEvent.OnQuestionAmountPick(amount.toInt()))
         },
         colorSet = colorSet
@@ -129,52 +144,62 @@ private fun ColumnScope.QuizSetupDialogContent(
 
     Spacer(Modifier.height(16.dp))
 
+    // label for difficulty
     Text(text = stringResource(R.string.difficulty))
 
     Spacer(Modifier.height(8.dp))
 
+    // mapping QuestionDifficulty to its string representation in UI
     val difficulties = mapOf(
         QuestionDifficulty.Any to stringResource(R.string.any),
         QuestionDifficulty.Easy to stringResource(R.string.easy),
         QuestionDifficulty.Medium to stringResource(R.string.medium),
         QuestionDifficulty.Hard to stringResource(R.string.hard),
     )
+    // difficulty buttons
     QuizSegmentedButtons(
         labels = difficulties.values.toList(),
         selectedIndex = difficulties.keys.toList().indexOf(state.pickedDifficulty),
-        onSelect = {
-            onEvent(QuizEvent.OnQuestionDifficultyPick(difficulties.keys.toList()[it]))
+        onSelect = { selectedIndex ->
+            // sending picked difficulty to view model
+            onEvent(QuizEvent.OnQuestionDifficultyPick(difficulties.keys.toList()[selectedIndex]))
         },
         colorSet = colorSet,
     )
 
     Spacer(Modifier.height(16.dp))
 
+    // label for type
     Text(text = stringResource(R.string.type))
 
     Spacer(Modifier.height(8.dp))
 
+    // mapping QuestionType to its string representation in UI
     val types = mapOf(
         QuestionType.Any to stringResource(R.string.any),
         QuestionType.Multiple to stringResource(R.string.multiple_choise),
         QuestionType.Boolean to stringResource(R.string.true_false),
     )
+    // type buttons
     QuizSegmentedButtons(
         labels = types.values.toList(),
         selectedIndex = types.keys.toList().indexOf(state.pickedType),
-        onSelect = {
-            onEvent(QuizEvent.OnQuestionTypePick(types.keys.toList()[it]))
+        onSelect = { selectedIndex ->
+            // sending picked type to view model
+            onEvent(QuizEvent.OnQuestionTypePick(types.keys.toList()[selectedIndex]))
         },
         colorSet = ColorSets.red,
     )
 
     Spacer(Modifier.height(16.dp))
 
+    // buttons at the bottom
     Row(
         modifier = Modifier.align(Alignment.End),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        // button for canceling dialog
         TextButton(
             onClick = onDismissRequest,
             colors = ButtonDefaults.textButtonColors(
@@ -184,6 +209,7 @@ private fun ColumnScope.QuizSetupDialogContent(
             Text(text = stringResource(R.string.cancel))
         }
 
+        // button for starting quiz
         Button(
             onClick = {
                 onEvent(QuizEvent.OnStartQuizClick)
